@@ -85,6 +85,9 @@ function bdDate(getDate) {
     },
     getSeason() {
       return bd_season
+    },
+    getEra() {
+      return 'বঙ্গাব্দ'
     }
   }
 }
