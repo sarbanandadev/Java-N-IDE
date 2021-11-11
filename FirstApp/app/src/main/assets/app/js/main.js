@@ -1,25 +1,21 @@
-const en_months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর']
-const bd_months = ['বৈশাখ', 'জ্যৈষ্ঠ', 'আষাঢ়', 'শ্রাবণ', 'ভাদ্র', 'আশ্বিন', 'কার্তিক', 'অগ্রহায়ণ', 'পৌষ', 'মাঘ', 'ফাল্গুন', 'চৈত্র']
-const bd_seasons = ['গ্রীষ্মকাল', 'বর্ষাকাল', 'শরৎকাল', 'হেমন্তকাল', 'শীতকাল', 'বসন্তকাল']
-const bd_days = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার']
-const bd_total = [31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30, 30]
+const enMonths = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর']
+const bdMonths = ['বৈশাখ', 'জ্যৈষ্ঠ', 'আষাঢ়', 'শ্রাবণ', 'ভাদ্র', 'আশ্বিন', 'কার্তিক', 'অগ্রহায়ণ', 'পৌষ', 'মাঘ', 'ফাল্গুন', 'চৈত্র']
+const bdSeasons = ['গ্রীষ্মকাল', 'বর্ষাকাল', 'শরৎকাল', 'হেমন্তকাল', 'শীতকাল', 'বসন্তকাল']
+const bdDays = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার']
+const bdTotal = [31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30, 30]
 
-const num = { 0: '০', 1: '১', 2: '২', 3: '৩', 4: '৪', 5: '৫', 6: '৬', 7: '৭', 8: '৮', 9: '৯' }
+const bdDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯']
 
-function numConvert(EN) {
-  let BD = []
-  for (let i = 0; i < EN.length; ++i) {
-    if (num.hasOwnProperty(EN[i])) {
-      BD.push(num[EN[i]]);
-    } else {
-      BD.push(EN[i])
-    }
+function numConvert(en) {
+  let bd = []
+  for (let i = 0; i < en.length; ++i) {
+    bdDigits.hasOwnProperty(en[i]) ? bd.push(bdDigits[en[i]]) : bd.push(en[i])
   }
-  return BD.join('')
+  return bd.join('')
 }
 
-Number.prototype.pad = function(dig) {
-  for (var n = this.toString(); n.length < dig; n = 0 + n);
+Number.prototype.pad = function(v) {
+  for (var n = this.toString(); n.length < v; n = 0 + n);
   return numConvert(n)
 }
 
@@ -47,7 +43,7 @@ function bdDate(getDate) {
     enMonth = getDate.getMonth(),
     enYear = getDate.getFullYear()
   if (isLeapYear(enYear)) {
-    bd_total[10] = 31 // If the given enorian Year is a LeapYear then, the Falgun month enclosed in the enorian year will be 31 days
+    bdTotal[10] = 31 // If the given enorian Year is a LeapYear then, the Falgun month enclosed in the enorian year will be 31 days
   }
   // If the given date is smaller than 14th April of current enorian Year
   // 3 is the index of 'April'
@@ -55,78 +51,67 @@ function bdDate(getDate) {
     enYear = enYear - 1
   }
   let epoch = new Date(enYear + '-04-13')
-  let bd_year = enYear - 593
+  let bdYear = enYear - 593
   let remainingDate = dateDiffInDays(epoch, getDate)
   let monthIndex = 0
 
-  for (let i = 0; i < bd_months.length; i++) {
-    if (remainingDate <= bd_total[i]) {
+  for (let i = 0; i < bdMonths.length; i++) {
+    if (remainingDate <= bdTotal[i]) {
       monthIndex = i
       break
     }
-    remainingDate -= bd_total[i]
+    remainingDate -= bdTotal[i]
   }
 
-  let bd_date = remainingDate
-  let bd_season = bd_seasons[Math.floor(monthIndex / 2)] // ('পৌষ' + 'মাঘ') = 'শীত'. Every consecutive two index in 'bd_months' indicates a single index in 'bd_seasons'.
+  let bdDate = remainingDate
+  let bdSeason = bdSeasons[Math.floor(monthIndex / 2)] // ('পৌষ' + 'মাঘ') = 'শীত'. Every consecutive two index in 'bdMonths' indicates a single index in 'bdSeasons'.
 
   return {
     getDay() {
-      return bd_days[enDay]
+      return bdDays[enDay]
     },
     getDate() {
-      return bd_date.pad()
+      return bdDate
     },
     getMonth() {
-      return bd_months[monthIndex]
+      return bdMonths[monthIndex]
     },
     getYear() {
-      return bd_year.pad(2)
+      return bdYear
     },
     getSeason() {
-      return bd_season
-    },
-    getEra() {
-      return 'বঙ্গাব্দ'
+      return bdSeason
     }
+
   }
 }
 
-let bangla = bdDate(),
-  bd_wd = bangla.getDay(),
-  bd_dd = bangla.getDate(),
-  bd_mm = bangla.getMonth(),
-  bd_yy = bangla.getYear(),
-  bd_sea = bangla.getSeason(),
-  bd_era = bangla.getEra()
+let bd = bdDate(),
+  bd_wd = bd.getDay(),
+  bd_dd = bd.getDate(),
+  bd_mm = bd.getMonth(),
+  bd_yy = bd.getYear(),
+  bd_sea = bd.getSeason()
 
-function updateClock() {
-  let now = new Date(),
-    wd = now.getDay(),
-    dd = now.getDate(),
-    mm = now.getMonth(),
-    yy = now.getFullYear(),
-    hou = now.getHours(),
-    min = now.getMinutes(),
-    sec = now.getSeconds(),
-    per = 'পূর্বাহ্ন'
+function digitalClock() {
+  let d = new Date(),
+    wd = d.getDay(),
+    dd = d.getDate(),
+    mm = d.getMonth(),
+    yy = d.getFullYear(),
+    hou = d.getHours(),
+    min = d.getMinutes(),
+    sec = d.getSeconds(),
+    per = hou >= 12 ? 'অপরাহ্ন' : 'পূর্বাহ্ন'
 
-  if (hou >= 12) {
-    per = 'অপরাহ্ন'
-  }
-  if (hou == 0) {
-    hou = 12
-  }
-  if (hou > 12) {
-    hou = hou - 12
-  }
+  hou = hou == 0 ? hou = 12 : hou > 12 ? hou - 12 : hou
 
+  let values = [bdDays[wd] + ', ', dd.pad(), enMonths[mm] + ', ', yy.pad(), bd_dd.pad(), bd_mm + ', ', bd_yy.pad() + ', ', bd_sea, hou.pad(2), min.pad(2), sec.pad(2), per]
   let ids = ['day', 'date', 'month', 'year', 'bd_date', 'bd_month', 'bd_year', 'bd_season', 'hour', 'minutes', 'seconds', 'period']
-  let values = [bd_days[wd] + ', ', dd.pad(), en_months[mm] + ', ', yy.pad(), bd_dd, bd_mm + ', ', bd_yy + ', ', bd_sea, hou.pad(2), min.pad(2), sec.pad(2), per]
   for (let i = 0; i < ids.length; i++) document.getElementById(ids[i]).firstChild.nodeValue = values[i]
 }
 
-function initClock() {
-  updateClock()
-  window.setInterval('updateClock()', 1)
-}
+(() => {
+  digitalClock()
+  window.setInterval('digitalClock()', 1000)
+})()
