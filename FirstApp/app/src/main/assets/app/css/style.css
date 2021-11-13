@@ -74,7 +74,7 @@ body {
 }
 
 .row:hover .time span:last-child {
-  /* color: rgb(66, 133, 244);
-  background: rgb(255, 255, 255); */
-  border: 1px solid rgb(255, 255, 255)
+  color: rgb(66, 133, 244);
+  background: rgb(255, 255, 255);
+  /* border: 1px solid rgb(255, 255, 255) */
 }
