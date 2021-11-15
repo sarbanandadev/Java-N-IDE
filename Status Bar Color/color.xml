@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="black">#000000</color>
+  <color name="white">#FFFFFF</color>
+  <color name="g-blue">#4285F4</color>
+  <color name="g-red">#DB4437</color>
+  <color name="g-green">#0F9D58</color>
+  <color name="g-yellow">#F4B400</color>
+  <color name="js-yellow">#F7DF1E</color>
+</resources>
